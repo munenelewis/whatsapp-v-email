@@ -1,23 +1,64 @@
+import { auth, db } from '../../firebase'
+
 import ChatScreen from '../../components/ChatScreen'
 import Head from 'next/head'
 import Sidebar from '../../components/Sidebar'
+import getRecipentEmail from '../../utils/getRecipentEmail'
 import styled from 'styled-components'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
-function Chat() {
+function Chat({ chat, messages }) {
+  const [user] = useAuthState(auth)
   return (
     <Container>
       <Head>
-        <title>Chat</title>
+        <title>Chat with {getRecipentEmail(chat.users, user)}</title>
       </Head>
       <Sidebar />
       <ChatContainer>
-        <ChatScreen />
+        <ChatScreen chat={chat} messages={messages} />
       </ChatContainer>
     </Container>
   )
 }
 
 export default Chat
+
+export async function getServerSideProps(context) {
+  const ref = db.collection('chat').doc(context.query.id)
+
+  const messageRes = await ref
+    .collection('messages')
+    .orderBy('timestamp', 'asc')
+    .get()
+
+  const messages = messageRes.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .map((messages) => ({
+      ...messages,
+      timestamp: messages.timestamp.toDate().getTime(),
+    }))
+
+  const chatRes = await ref.get()
+  const chat = {
+    id: chatRes.id,
+    ...chatRes.data(),
+  }
+
+  console.log('====================================');
+  console.log(chat,"chat");
+  console.log('====================================');
+
+  return {
+    props: {
+      message: JSON.stringify(messages),
+      chat: chat,
+    },
+  }
+}
 const Container = styled.div`
   display: flex;
 `
