@@ -33,11 +33,11 @@ const Container = styled.div`
   display: grid;
   place-items: center;
   height: 100vh;
-  background: blue;
+  background: whitesmoke;
 `
 const LoginContainer = styled.div`
 padding:100px;
-background:red;
+background:white;
   display: flex;
   flex-direction: column;
   border-color:black;
