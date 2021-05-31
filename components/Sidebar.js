@@ -3,6 +3,7 @@ import * as EmailValidator from 'email-validator'
 import { Avatar, Button, IconButton } from '@material-ui/core'
 import { auth, db } from '../firebase'
 
+import Chat from '../components/Chat'
 import ChatIcon from '@material-ui/icons/Chat'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import SearchIcon from '@material-ui/icons/Search'
@@ -13,35 +14,43 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 function Sidebar() {
   const [user] = useAuthState(auth)
   const userChatRef = db
-    .collection('users')
+    .collection('chats')
     .where('users', 'array-contains', user.email)
   const [chatsSnapshot] = useCollection(userChatRef)
+  console.log('====================================');
+  console.log(chatsSnapshot,"chatsSnapshot");
+  console.log('====================================');
   const createChat = () => {
     const input = prompt('enter an email address')
+    console.log(input,"input",EmailValidator.validate(input));
     if (!input) {
       return null
     }
 
     if (
-      EmailValidator.validate(input && !chatAlreadyExists(input)) &&
+      EmailValidator.validate(input) &&  !chatAlreadyExists(input) &&
       input !== user.email
     ) {
       db.collection('chats').add({
         users: [user.email, input],
       })
+
+      console.log('====================================');
+      console.log("add users");
+      console.log('====================================');
     }
   }
 
-  const chatAlreadyExists = (recipent) =>
+  const chatAlreadyExists = (recipentEmail) =>
     !!chatsSnapshot?.docs.find(
       (chat) =>
-        chat.data().users.find((users) => user === recipentEmail)?.length > 0,
+        chat.data().users.find((user) => user === recipentEmail)?.length > 0,
     )
 
   return (
     <Container>
       <Header>
-        <UserAvatar onClick={() => auth.signOut()} />
+        <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
         <IconsContainer>
           <IconButton>
             <ChatIcon />
@@ -59,6 +68,13 @@ function Sidebar() {
       <SideBarButton onClick={createChat}>Start a new chat </SideBarButton>
 
       {/* list of chat */}
+      {chatsSnapshot?.docs.map((chat)=>{
+          console.log('====================================');
+          console.log(chat,"chat");
+          console.log('====================================');
+         return <Chat id={chat.id} key={chat.id} users={chat.data().users}  />
+          
+      })}
     </Container>
   )
 }
