@@ -94,9 +94,8 @@ function ChatScreen({ chat, messages }) {
           {/* <p> {firebase?.firestore?.FieldValue?.serverTimestamp()} </p> */}
           <h3>{recipentEmail}</h3>
           {recipentSnapshot ? (
-            <p>Last Seen
-              {recipient?.lastSeen?.toDate() ? (
-                <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
+            <p>Last Seen :  {recipient?.lastSeen?.toDate() ? (
+                 <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
               ) : 'Unavailable'}
             </p>
           ) : <p>loading last active ...</p>}
