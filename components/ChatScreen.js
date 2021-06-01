@@ -6,6 +6,7 @@ import { InsertEmoticon } from '@material-ui/icons'
 import Message from './Message'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import SettingsVoiceIcon from '@material-ui/icons/SettingsVoice'
+import TimeAgo from 'timeago-react';
 import firebase from 'firebase'
 import getRecipentEmail from '../utils/getRecipentEmail'
 import styled from 'styled-components'
@@ -73,17 +74,29 @@ function ChatScreen({ chat, messages }) {
   const recipentEmail = getRecipentEmail(chat.users, user)
   const recipient = recipentSnapshot?.docs?.[0]?.data()
 
+  console.log('====================================');
+  console.log(recipient, "recipient");
+  console.log('====================================');
+
   return (
     <Container>
       <Header>
         {recipient ? (
-          <Avatar src={recipient?.photoURL} />
+          <Avatar src={recipient?.photoUser} />
         ) : (
           <Avatar>{recipentEmail[0]}</Avatar>
         )}
         <HeaderInformation>
-          <h3>{recipentEmail}</h3>
           {/* <p> {firebase?.firestore?.FieldValue?.serverTimestamp()} </p> */}
+          <h3>{recipentEmail}</h3>
+          {recipentSnapshot ? (
+            <p>Last Seen :
+              {recipient?.lastSeen?.toDate() ? (
+                <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
+              ) : 'Unavailable'}
+            </p>
+          ) : <p>loading last active ...</p>}
+
         </HeaderInformation>
         <HeaderIcons>
           <IconButton>
