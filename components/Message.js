@@ -9,9 +9,6 @@ function Message({ user, message }) {
 
   const TypeOfMessage = user === userLoggedIn.email ? Sender : Reciever
 
-  console.log('====================================')
-  console.log(user, 'TypeOfMessage')
-  console.log('====================================')
   return (
     <Container>
       <TypeOfMessage>

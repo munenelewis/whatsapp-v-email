@@ -34,7 +34,6 @@ function ChatScreen({ chat, messages }) {
   )
 
   const showMessages = () => {
-    // console.log(messages,"messages",messageSnapshot);
     if (messageSnapshot) {
       return messageSnapshot.docs.map((message) => (
         <Message
@@ -76,10 +75,6 @@ function ChatScreen({ chat, messages }) {
   const recipentEmail = getRecipentEmail(chat.users, user)
   const recipient = recipentSnapshot?.docs?.[0]?.data()
 
-  console.log('====================================');
-  console.log(recipient, "recipient");
-  console.log('====================================');
-  
 
   const scrollToBottom = () => {
     endOfMessage.current.scrollIntoView({
@@ -99,7 +94,7 @@ function ChatScreen({ chat, messages }) {
           {/* <p> {firebase?.firestore?.FieldValue?.serverTimestamp()} </p> */}
           <h3>{recipentEmail}</h3>
           {recipentSnapshot ? (
-            <p>Last Seen :
+            <p>Last Seen
               {recipient?.lastSeen?.toDate() ? (
                 <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
               ) : 'Unavailable'}
