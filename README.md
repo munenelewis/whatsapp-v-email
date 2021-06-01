@@ -77,6 +77,8 @@ This is an example of how to list things you need to use the software and how to
 1. A python backend (am getting rid of firebase)
 2. postgress db
 3. serve apis from python using node js 
+4. upload files 
+5. search 
 
 <!-- LICENSE -->
 ## License
