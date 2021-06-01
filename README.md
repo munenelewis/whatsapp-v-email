@@ -72,8 +72,11 @@ This is an example of how to list things you need to use the software and how to
 3. Register app in firebase `config.js`
  
 
+## In development 
 
-
+1. A python backend (am getting rid of firebase)
+2. postgress db
+3. serve apis from python using node js 
 
 <!-- LICENSE -->
 ## License
