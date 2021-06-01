@@ -6,9 +6,7 @@ import styled from 'styled-components'
 
 function Login() {
   const signIn = () => {
-    console.log('====================================')
-    console.log('gggggg')
-    console.log('====================================')
+   
     auth.signInWithPopup(provider).catch(alert)
   }
   return (

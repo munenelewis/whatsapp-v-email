@@ -25,6 +25,12 @@ function ChatScreen({ chat, messages }) {
       .collection('messages')
       .orderBy('timestamp', 'asc'),
   )
+  const [recipentSnapshot] = useCollection(
+    db
+      .collection('users')
+      .where('email', '==', getRecipentEmail(chat.users, user)),
+  )
+
   const showMessages = () => {
     // console.log(messages,"messages",messageSnapshot);
     if (messageSnapshot) {
@@ -39,9 +45,8 @@ function ChatScreen({ chat, messages }) {
         />
       ))
     } else {
-      return JSON.parse(messages).map((message) =>
-        console.log(message, 'message'),
-        // <Message key={message?.id} user={message.user} message={message} />
+      return JSON.parse(messages).map(
+        <Message key={message?.id} user={message.user} message={message} />
       )
     }
   }
@@ -65,11 +70,17 @@ function ChatScreen({ chat, messages }) {
     setInput('')
   }
 
-  const recipentEmail = getRecipentEmail(chat?.users, user)
+  const recipentEmail = getRecipentEmail(chat.users, user)
+  const recipient = recipentSnapshot?.docs?.[0]?.data()
+
   return (
     <Container>
       <Header>
-        <Avatar />
+        {recipient ? (
+          <Avatar src={recipient?.photoURL} />
+        ) : (
+          <Avatar>{recipentEmail[0]}</Avatar>
+        )}
         <HeaderInformation>
           <h3>{recipentEmail}</h3>
           {/* <p> {firebase?.firestore?.FieldValue?.serverTimestamp()} </p> */}

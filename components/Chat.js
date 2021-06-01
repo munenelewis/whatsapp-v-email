@@ -8,7 +8,6 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 import { useRouter } from 'next/router'
 
 function Chat({ id, users }) {
-
   const router = useRouter()
   const [user] = useAuthState(auth)
   const [recipentSnapshot] = useCollection(
@@ -20,6 +19,8 @@ function Chat({ id, users }) {
   const enterChat = () => {
     router.push(`/chat/${id}`)
   }
+
+
   return (
     <Container onClick={enterChat}>
       {recipient ? (
