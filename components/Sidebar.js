@@ -15,29 +15,23 @@ function Sidebar() {
   const [user] = useAuthState(auth)
   const userChatRef = db
     .collection('chats')
-    .where('users', 'array-contains', user.email)
+    .where('users', 'array-contains', user?.email)
   const [chatsSnapshot] = useCollection(userChatRef)
-  console.log('====================================');
-  console.log(chatsSnapshot,"chatsSnapshot");
-  console.log('====================================');
+
   const createChat = () => {
     const input = prompt('enter an email address')
-    console.log(input,"input",EmailValidator.validate(input));
     if (!input) {
       return null
     }
 
     if (
-      EmailValidator.validate(input) &&  !chatAlreadyExists(input) &&
+      EmailValidator.validate(input) &&
+      !chatAlreadyExists(input) &&
       input !== user.email
     ) {
       db.collection('chats').add({
         users: [user.email, input],
       })
-
-      console.log('====================================');
-      console.log("add users");
-      console.log('====================================');
     }
   }
 
@@ -68,12 +62,8 @@ function Sidebar() {
       <SideBarButton onClick={createChat}>Start a new chat </SideBarButton>
 
       {/* list of chat */}
-      {chatsSnapshot?.docs.map((chat)=>{
-          console.log('====================================');
-          console.log(chat,"chat");
-          console.log('====================================');
-         return <Chat id={chat.id} key={chat.id} users={chat.data().users}  />
-          
+      {chatsSnapshot?.docs.map((chat) => {
+        return <Chat id={chat.id} key={chat.id} users={chat.data().users} />
       })}
     </Container>
   )
@@ -81,7 +71,14 @@ function Sidebar() {
 
 export default Sidebar
 
-const Container = styled.div``
+const Container = styled.div`
+  flex: 0.45;
+  border-right: 1px solid whitesmoke;
+  height: 100vh;
+  min-width: 300px;
+  max-width: 350px;
+  overflow-y: scroll;
+`
 
 const Header = styled.div`
   display: flex;
